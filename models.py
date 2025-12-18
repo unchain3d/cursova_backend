@@ -62,6 +62,35 @@ class Subscriptions(Base):
     visits_limit = Column(Integer, nullable=True)
 
 
+class Sessions(Base):
+    __tablename__ = "sessions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    trainer_id = Column(Integer, ForeignKey("trainers.id"))
+    client_id = Column(Integer, ForeignKey("users.id"))
+    session_time = Column(DateTime)
+    status = Column(String, default="booked")
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+    # Relationships
+    trainer = relationship("Trainers", back_populates="sessions")
+    client = relationship("Users", back_populates="bookings")
+
+
+class VisitHistory(Base):
+    __tablename__ = "visit_history"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    trainer_id = Column(Integer, ForeignKey("trainers.id"))
+    session_id = Column(Integer, ForeignKey("sessions.id"), nullable=True)
+    visit_date = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    trainer_name = Column(String)
+
+    # Relationships
+    user = relationship("Users", back_populates="visit_history")
+
+
 class SubscriptionPurchases(Base):
     __tablename__ = "subscription_purchases"
 
