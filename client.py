@@ -7,7 +7,7 @@ from models import (
     SubscriptionPurchases,
     UserRole, SubscriptionType
 )
-from dependencies import db_dependency
+from factory import db_dependency
 from auth import get_user
 
 router = APIRouter(
